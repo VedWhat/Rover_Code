@@ -53,48 +53,60 @@ def get_heading():
     return az12, dist
 def match_head():
     while True:
+        count=0
         waypoint_heading,dist=get_heading()
-        #waypoint_heading_opp=waypoint_heading+180
         imu_heading=get_imu_head()
         heading_diff=imu_heading-waypoint_heading
         print(imu_heading,waypoint_heading,heading_diff)
 
         if imu_heading < waypoint_heading+10 and imu_heading>waypoint_heading-10:
+            if count is 1:
                 brute_stop()
                 break
+            else
+                break    
         if heading_diff >=-180:
-                if heading_diff<=0:
-                        clockwise()
+            if heading_diff<=0:
+                    clockwise()
+                    count=1
         if heading_diff <-180:
-                anticlockwise()
+            anticlockwise()
+            count=1
         if heading_diff>=0:
-                if heading_diff<180:
-                        turn = 2 
-                        anticlockwise()             
+            if heading_diff<180:
+                    turn = 2 
+                    anticlockwise()
+                    count=1             
         if heading_diff >= 180:
-                turn = 1
-                clockwise()
-def matchdist():
-    while True:
-        try:
+            turn = 1
+            clockwise()
+            count=1
+def traversal():
+    try:
+        while True:
             match_head()
             waypoint_heading,waypoint_dist=get_heading()
-            if waypoint_dist>5:
-                print('Matching Distance',waypoint_dist)
-                straight()  
+            if is_clear():
+                if waypoint_dist>5:
+                    print('Matching Distance',waypoint_dist)
+                    straight()
+                else:
+                    print("Reached")
+                    brute_stop()
+                    break
             else:
-                print("Reached")
-                brute_stop()  
-        except KeyboardInterrupt:
-            print("Killed")
-            brute_stop()
-            break
-
-
+                while(not is_clear()):
+                    anticlockwise()   
+                for i in range(10):
+                    straight()             
+    except KeyboardInterrupt:
+        print("Killed")
+        brute_stop()
+        break                
 global startlat,startlong
 startlat,startlong=pos_update()
 global end_latitude,end_longitude
 endlat=13.3478231
 endlong=74.7921025
-matchdist()
+traversal()
 
