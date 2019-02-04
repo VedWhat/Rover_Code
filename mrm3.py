@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 import socket
 import time
 import pygame
@@ -7,8 +6,6 @@ import math
 import serial
 from time import sleep
 import os
-import rospy
-from std_msgs.msg import String
 
     
 def map1(x,in_min,in_max,out_min,out_max):
@@ -27,32 +24,44 @@ def arm():
 	_5d=j.get_button(3)
 	_6u=0
 	_6d=0
-	pub.publish('n')
+	transmit.sendto('n',(UDP_IP,UDP_PORT))
 	if _1u:
-		pub.publish('A')
+		print('1up')
+		transmit.sendto('A',(UDP_IP,UDP_PORT))
 	elif _1d:
-		pub.publish('A')
+		print('1down')
+		transmit.sendto('B',(UDP_IP,UDP_PORT))
 
 	elif _2u:
-		pub.publish('A')
+		print('2up')
+		transmit.sendto('C',(UDP_IP,UDP_PORT))
 	elif _2d:
-		pub.publish('A')
+		print('2down')
+		transmit.sendto('D',(UDP_IP,UDP_PORT))
 	elif _3u:
-		pub.publish('A')
+		print('3up')
+		transmit.sendto('E',(UDP_IP,UDP_PORT))
 	elif _3d:
-		pub.publish('A')
+		print('3down')
+		transmit.sendto('F',(UDP_IP,UDP_PORT))
 	elif _4u:
-		pub.publish('A')
+		print('4up')
+		transmit.sendto('G',(UDP_IP,UDP_PORT))
 	elif _4d:
-		pub.publish('A')
+		print('4down')
+		transmit.sendto('H',(UDP_IP,UDP_PORT))
 	elif _5u:
-		pub.publish('A')
+		print('5up')
+		transmit.sendto('I',(UDP_IP,UDP_PORT))
 	elif _5d:
-		pub.publish('A')
+		print('5down')
+		transmit.sendto('J',(UDP_IP,UDP_PORT))
 	elif _6u:
-		pub.publish('A')
+		print('6up')
+		transmit.sendto('K',(UDP_IP,UDP_PORT))
 	elif _6d:
-		pub.publish('A')
+		print('6down')
+		transmit.sendto('L',(UDP_IP,UDP_PORT))
 def motorcode():
 	x1=j.get_axis(0)
 	y1=j.get_axis(1)
@@ -87,7 +96,7 @@ def motorcode():
 	val="m"+str(gear)+"x"+str(x)+"y"+str(y)
 	clear = lambda : os.system('tput reset')
 	#clear()
-	pub.publish(val)
+	print(val)
 	try:
 		transmit.sendto(val,(UDP_IP,UDP_PORT))
 	except Exception:
@@ -106,7 +115,7 @@ count=0
 transmit=socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 
 #h=socket.gethostbyaddr('192.168.0.3')
 #print h
-UDP_IP = '192.168.1.7' # this IP of my pc. When I want raspberry pi 2`s as a client, I replace it with its IP '169.254.54.195'
+UDP_IP = '192.168.1.99' # this IP of my pc. When I want raspberry pi 2`s as a client, I replace it with its IP '169.254.54.195'
 UDP_PORT = 5005
 
 

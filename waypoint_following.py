@@ -52,15 +52,15 @@ def get_heading():
         az12=az12+360
     return az12, dist
 def match_head():
-    waypoint_heading,dist=get_heading()
     while True:
+        waypoint_heading,dist=get_heading()
         #waypoint_heading_opp=waypoint_heading+180
         imu_heading=get_imu_head()
         heading_diff=imu_heading-waypoint_heading
         print(imu_heading,waypoint_heading,heading_diff)
 
         if imu_heading < waypoint_heading+10 and imu_heading>waypoint_heading-10:
-                brute_stop()
+                #brute_stop()
                 break
         if heading_diff >=-180:
                 if heading_diff<=0:
@@ -84,6 +84,10 @@ def matchdist():
                 straight()  
             else:
                 print("Reached,Start looking for marker")
+                waypoint_lats,waypoint_long=waypoint_generator()
+                for lat,lon in zip(waypoint_lat,waypoint_long):
+                    endlat=lat
+                    endlong=lon
                 brute_stop()  
         except KeyboardInterrupt:
             print("Killed")
@@ -93,7 +97,7 @@ def matchdist():
 
 global startlat,startlong
 startlat,startlong=pos_update()
-global end_latitude,end_longitude
+global end_latitude,end_longitude,waypoint_lats,waypoint_long
 endlat=13.3478231
 endlong=74.7921025
 matchdist()

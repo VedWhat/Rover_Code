@@ -15,8 +15,8 @@ def arm():
         
         m1=j.get_button(6)
         m2=j.get_button(7)
-        m3=j.get_button(5)
-        m4=j.get_button(9)
+        m3=j.get_button(3)
+        m4=j.get_button(5)
         m5=j.get_button(4)
         m6=j.get_button(2)
         hat=j.get_hat(0)
@@ -27,10 +27,10 @@ def arm():
                 if hat[0]==1:
 
                         p='swivel clockwise '
-                        data="nA"
+                        data="nG"
                 elif hat[0]==-1:
                         p='swivel anticlockwise '
-                        data="nB"#swivel
+                        data="nH"#swivel
         elif m2:
                 p='2nd Link'
                 if  hat[1]==1:
@@ -40,28 +40,28 @@ def arm():
                         p='2nd link linear up '
                         data="nD"#actuator
         elif m3:
-                p='pitch'
-                if hat[1]==-1 :
-                        p='pitch up '
+                p='Roll'
+                if hat[0]==-1 :
+                        p='Roll anticlockwise '
                         data="nE"
-                elif hat[1]==1:
-                        p='pitch down'
+                elif hat[0]==1:
+                        p='Roll clockwise'
                         data="nF"
         elif m6:
                 p='gripper'
-                if hat[1]==-1 or hat[0]==-1:
-                        p='gripper close '
-                        data="nG"
-                elif hat[1]==1 or hat[0]==1:         
+                if hat[1]==-1:
                         p='gripper open '
-                        data="nH"
+                        data="nA"
+                elif hat[1]==1:         
+                        p='gripper close '
+                        data="nB"
         elif m4:
-                p='roll'
-                if hat[0]==-1:
-                        p='roll anticlockwise '
+                p='Pitch'
+                if hat[1]==-1:
+                        p='Pitch up '
                         data="nI"
-                elif hat[0]==1 :
-                        p='roll clockwise '
+                elif hat[1]==1:
+                        p='Pitch down'
                         data="nJ"
         elif m1:
                 p='1st link'
@@ -81,8 +81,7 @@ def motorcode():
         global x1,y1,gear
         x1=j.get_axis(0)
         y1=j.get_axis(1)
-        hold=j.get_button(6)
-        release=j.get_button(7)
+        #print(x1,y1)
         gear=0
         gear=j.get_axis(3)
 
@@ -116,27 +115,15 @@ def motorcode():
 
         val="m"+str(gear)+"x"+str(x)+"y"+str(y)
         #clear()
-        hold=j.get_button(1)
-        if hold:
-            sleep(0.2)
-            if j.get_button(1):
-                if hold==True:
-                    hold=False
-                    print('HA')
-                else:
-                    hold=True
-                    print('Active')    
-        if hold:
-            print(prev_val)
-            transmit.send(prev_val)
-        else:
-            print(val)
-            transmit.send(val)                
-        prev_val=val
+        print(val)
+
+        transmit.send(val)
+    
 count=0
 TCP_IP = '192.168.1.7'
-TCP_PORT = 5008
+TCP_PORT = 5005
 BUFFER_SIZE = 1024
+MESSAGE = "Hello, World!"
 
 transmit = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 transmit.connect((TCP_IP, TCP_PORT))
